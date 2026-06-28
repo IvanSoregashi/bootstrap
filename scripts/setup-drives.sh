@@ -116,11 +116,7 @@ while true; do
             echo -e "Persistent Disk Path: ${GREEN}${DISK_BY_ID}${NC}"
             echo -e "Model: ${model}"
 
-            # Debian-specific: install parted if needed
-            if os_is_debian; then
-                source "${SCRIPT_DIR}/../debian/setup-ext4.sh" 2>/dev/null || true
-                debian_setup_ext4 "$SYS_USER" "$selected_disk"
-            fi
+            ext4_ensure_tools
 
             # Warning & Confirmation
             echo -e "${RED}${BOLD}!!! WARNING !!! WARNING !!! WARNING !!!${NC}"
@@ -191,11 +187,7 @@ while true; do
             echo ""
             echo -e "${CYAN}--> Preparing ZFS Storage Pool Setup...${NC}"
 
-            # Debian-specific: install ZFS if needed
-            if os_is_debian && ! zfs_check_installed; then
-                source "${SCRIPT_DIR}/../debian/install-zfs.sh" 2>/dev/null || true
-                debian_install_zfs
-            fi
+            zfs_ensure_installed
 
             if ! zfs_check_installed; then
                 error "ZFS tools are not available. Install them first."

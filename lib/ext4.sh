@@ -44,3 +44,25 @@ ext4_setup_fstab() {
     fi
     echo "${part_by_id} ${mount_point} ext4 defaults 0 2" | run tee -a /etc/fstab > /dev/null
 }
+
+ext4_ensure_tools() {
+    if command -v parted &>/dev/null; then
+        return 0
+    fi
+
+    echo -e "${YELLOW}'parted' utility is required but not installed.${NC}"
+    read -r -p "Install parted now? (y/n) [y]: " inst_parted
+    inst_parted=${inst_parted:-y}
+    if [[ "$inst_parted" =~ ^[Yy]$ ]]; then
+        if os_is_debian; then
+            apt-get update
+            apt-get install -y parted
+        else
+            error "parted is required. Install it manually for your distribution."
+            exit 1
+        fi
+    else
+        error "parted is required to set up partitions."
+        exit 1
+    fi
+}
