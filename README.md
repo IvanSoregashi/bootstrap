@@ -14,7 +14,7 @@ server.
 │                            # install-tailscale, clone-private-repo, restore-backup
 ├── lib/                     # common, platform, docker, ram, journal, atime,
 │                            # zfs, ext4, system_optimizations helpers
-└── old_utsuwa/              # Pre-refactor scripts (reference only)
+└── AGENTS.md
 ```
 
 ## Quick Start (Utsuwa)

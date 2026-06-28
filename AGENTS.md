@@ -69,8 +69,9 @@ repo contains no details about private repo contents beyond that description.
 
 ## Current State
 
-The repo has been refactored from the old monolithic `old_utsuwa/` scripts.
-The `old_utsuwa/` directory remains for reference only.
+The repo was refactored from the old monolithic `old_utsuwa/` scripts.
+The old directory has been removed as all functionality was migrated to the
+current structure (`lib/` functions + `scripts/` entry points).
 
 Current structure:
 
@@ -90,7 +91,6 @@ Current structure:
 │   ├── zfs.sh               #   pool/dataset creation, ARC config, ensure-installed
 │   ├── ext4.sh              #   partitioning, formatting, fstab, ensure-tools
 │   └── system_optimizations.sh #   eMMC/SSD write reduction orchestrator
-├── old_utsuwa/              # Original monolithic scripts (reference only)
 ├── AGENTS.md
 └── README.md
 ```
