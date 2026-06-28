@@ -90,6 +90,9 @@ Current structure:
 │   ├── atime.sh             #   noatime filesystem tuning
 │   ├── zfs.sh               #   pool/dataset creation, ARC config, ensure-installed
 │   ├── ext4.sh              #   partitioning, formatting, fstab, ensure-tools
+│   ├── bw.sh                #   Bitwarden CLI install
+│   ├── restic.sh            #   Restic backup tool install
+│   ├── tailscale.sh         #   Tailscale install
 │   └── system_optimizations.sh #   eMMC/SSD write reduction orchestrator
 ├── AGENTS.md
 └── README.md

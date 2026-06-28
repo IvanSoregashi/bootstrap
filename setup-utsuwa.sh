@@ -88,7 +88,7 @@ echo -e "  ${GREEN}✔${NC} Directories initialized."
 # ------------------------------------------------------------------
 echo -e "\n${BOLD}[3/7] Secrets Bootstrap${NC}"
 
-source "${SCRIPT_DIR}/scripts/install-bw.sh"
+source "${SCRIPT_DIR}/lib/bw.sh"
 install_bw
 
 bash "${SCRIPT_DIR}/bootstrap.sh"
@@ -99,7 +99,7 @@ echo -e "  ${GREEN}✔${NC} Secrets bootstrapped."
 # ------------------------------------------------------------------
 echo -e "\n${BOLD}[4/7] Backup Tool Installation${NC}"
 
-source "${SCRIPT_DIR}/scripts/install-restic.sh"
+source "${SCRIPT_DIR}/lib/restic.sh"
 install_restic
 echo -e "  ${GREEN}✔${NC} Restic installed."
 
@@ -133,7 +133,7 @@ read -r -p "  Install and connect Tailscale? (y/n) [n]: " setup_ts
 setup_ts=${setup_ts:-n}
 
 if [[ "$setup_ts" =~ ^[Yy]$ ]]; then
-    source "${SCRIPT_DIR}/scripts/install-tailscale.sh"
+    source "${SCRIPT_DIR}/lib/tailscale.sh"
     install_tailscale
 
     TAILSCALE_KEY_FILE="/srv/encrypted/apps/restic/tailscale-key"

@@ -13,7 +13,8 @@ server.
 │                            # install-docker, install-bw, install-restic,
 │                            # install-tailscale, clone-private-repo, restore-backup
 ├── lib/                     # common, platform, docker, ram, journal, atime,
-│                            # zfs, ext4, system_optimizations helpers
+│                            # zfs, ext4, bw, restic, tailscale,
+│                            # system_optimizations helpers
 └── AGENTS.md
 ```
 
