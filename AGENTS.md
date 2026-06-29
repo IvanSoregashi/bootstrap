@@ -62,7 +62,7 @@ repo contains no details about private repo contents beyond that description.
    dataset that must be unlocked manually via SSH after reboot. Bulk data
    (media, books) lives on an unencrypted ext4 volume that auto-mounts.
 
-4. **Secrets Bootstrap Flow:** `bootstrap.sh` fetches credentials from
+ 4. **Secrets Bootstrap Flow:** `scripts/bootstrap.sh` fetches credentials from
    Bitwarden/Vaultwarden (with local → cloud fallback), writes them to the
    encrypted ZFS volume with strict permissions (chmod 400), then logs out
    and wipes all session data from RAM.
@@ -76,7 +76,7 @@ current structure (`lib/` functions + `scripts/` entry points).
 Current structure:
 
 ```
-├── bootstrap.sh             # Secrets bootstrap (Bitwarden → local env files)
+├── scripts/bootstrap.sh     # Secrets bootstrap (Bitwarden → local env files)
 ├── setup-utsuwa.sh          # Full orchestration entry point
 ├── scripts/                 # setup-drives, setup-directories, optimize-system,
 │                            # install-docker, install-bw, install-restic,

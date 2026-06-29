@@ -7,7 +7,7 @@ server.
 ## Contents
 
 ```
-├── bootstrap.sh             # Secrets bootstrap (Bitwarden → local env files)
+├── scripts/bootstrap.sh     # Secrets bootstrap (Bitwarden → local env files)
 ├── setup-utsuwa.sh          # Full Utsuwa setup orchestrator
 ├── scripts/                 # setup-drives, setup-directories, optimize-system,
 │                            # install-docker, install-bw, install-restic,
@@ -30,7 +30,7 @@ Or run individual steps:
 sudo ./scripts/setup-drives.sh          # Interactive disk/ZFS/ext4 wizard
 sudo ./scripts/setup-directories.sh /vault/secure /bulk   # Directory + app setup
 sudo ./scripts/optimize-system.sh /bulk # eMMC/SSD write-reduction
-sudo ./bootstrap.sh                     # Secrets from Bitwarden
+sudo ./scripts/bootstrap.sh             # Secrets from Bitwarden
 ```
 
 ## Requirements

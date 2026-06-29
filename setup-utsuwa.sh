@@ -88,10 +88,7 @@ echo -e "  ${GREEN}✔${NC} Directories initialized."
 # ------------------------------------------------------------------
 echo -e "\n${BOLD}[3/7] Secrets Bootstrap${NC}"
 
-source "${SCRIPT_DIR}/lib/bw.sh"
-install_bw
-
-bash "${SCRIPT_DIR}/bootstrap.sh"
+bash "${SCRIPT_DIR}/scripts/bootstrap.sh"
 echo -e "  ${GREEN}✔${NC} Secrets bootstrapped."
 
 # ------------------------------------------------------------------
