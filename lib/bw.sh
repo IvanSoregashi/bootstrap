@@ -32,7 +32,7 @@ install_bw() {
 
 bw_configure_server() {
     local local_vaultwarden="https://vw.utsuwa.local"
-    local public_bitwarden="https://identity.bitwarden.com"
+    local public_bitwarden="https://vault.bitwarden.com"
 
     echo "Checking if local Vaultwarden ($local_vaultwarden) is online..."
     local http_status
