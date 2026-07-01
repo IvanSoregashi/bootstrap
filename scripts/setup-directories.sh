@@ -15,7 +15,7 @@ fi
 
 if [ ! -d "$1" ] || [ ! -d "$2" ]; then
     error "One or both of the provided directory paths do not exist on the filesystem."
-    echo "Please ensure the storage pools are mounted."
+    echo "Please ensure the paths exist (create them or mount the storage)."
     exit 1
 fi
 
@@ -32,28 +32,6 @@ echo -e "System User: ${GREEN}$SYS_USER${NC}"
 echo "--> Verifying drive mount safety..."
 check_mount_safety "$SECURE_PATH" "Secure"
 check_mount_safety "$DATA_PATH" "Data"
-
-# --- Setup Standardized /srv Bind Mounts ---
-echo -e "\n--> Preparing standardized /srv bind mounts..."
-mkdir -p /srv/encrypted /srv/data
-
-add_fstab_bind "$SECURE_PATH" "/srv/encrypted"
-add_fstab_bind "$DATA_PATH" "/srv/data"
-
-# --- Mount the new paths ---
-echo "--> Mounting standardized /srv layers..."
-
-if ! mountpoint -q /srv/encrypted; then
-    mount /srv/encrypted || echo -e "${YELLOW}Warning: /srv/encrypted could not mount (is the pool locked?)${NC}"
-else
-    echo "  /srv/encrypted is already mounted."
-fi
-
-if ! mountpoint -q /srv/data; then
-    mount /srv/data || echo -e "${YELLOW}Warning: /srv/data could not mount.${NC}"
-else
-    echo "  /srv/data is already mounted."
-fi
 
 # --- Consolidated Directory Creation ---
 echo -e "\n--> Creating directory structure..."

@@ -9,6 +9,56 @@ source "${SCRIPT_DIR}/../lib/ext4.sh"
 
 require_root
 SYS_USER=$(detect_user)
+
+echo -e "${YELLOW}setup-drives.sh is obsolete — use the interactive prompts in setup-utsuwa.sh step 1.${NC}"
+exit 1
+
+# ---------------------------------------------------------------------------
+# Preserved code — migrated from setup-directories.sh.
+# This handled bind-mounting storage paths to /srv/* and mounting them.
+# Kept here for reference; it is no longer called.
+# ---------------------------------------------------------------------------
+#
+# # --- Setup Standardized /srv Bind Mounts ---
+# echo -e "\n--> Preparing standardized /srv bind mounts..."
+# mkdir -p /srv/encrypted /srv/data
+#
+# if [ "$SECURE_PATH" != "/srv/encrypted" ]; then
+#     add_fstab_bind "$SECURE_PATH" "/srv/encrypted"
+# else
+#     echo "  /srv/encrypted is its own source; no bind mount needed."
+# fi
+#
+# if [ "$DATA_PATH" != "/srv/data" ]; then
+#     add_fstab_bind "$DATA_PATH" "/srv/data"
+# else
+#     echo "  /srv/data is its own source; no bind mount needed."
+# fi
+#
+# # --- Mount the new paths ---
+# echo "--> Mounting standardized /srv layers..."
+#
+# if [ "$SECURE_PATH" != "/srv/encrypted" ]; then
+#     if ! mountpoint -q /srv/encrypted; then
+#         mount /srv/encrypted || echo -e "${YELLOW}Warning: /srv/encrypted could not mount (is the pool locked?)${NC}"
+#     else
+#         echo "  /srv/encrypted is already mounted."
+#     fi
+# else
+#     echo "  /srv/encrypted is a plain directory; no mount needed."
+# fi
+#
+# if [ "$DATA_PATH" != "/srv/data" ]; then
+#     if ! mountpoint -q /srv/data; then
+#         mount /srv/data || echo -e "${YELLOW}Warning: /srv/data could not mount.${NC}"
+#     else
+#         echo "  /srv/data is already mounted."
+#     fi
+# else
+#     echo "  /srv/data is a plain directory; no mount needed."
+# fi
+# ---------------------------------------------------------------------------
+
 HELPERS_DIR="${SCRIPT_DIR}/helpers"
 
 display_suitable_disks() {

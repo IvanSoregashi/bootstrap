@@ -3,7 +3,7 @@
 # Utsuwa: Full System Setup Orchestrator
 #
 # Runs the complete setup flow for a Utsuwa storage node:
-#   1. Ensure storage mounts (/srv/encrypted, /srv/data)
+#   1. Ensure storage paths (/srv/encrypted, /srv/data)
 #   2. Create directory structure + app directories
 #   3. Bootstrap secrets from Bitwarden
 #   4. Install Restic and optionally restore from backup
@@ -25,55 +25,57 @@ echo -e "  System User: ${GREEN}${SYS_USER}${NC}"
 echo ""
 
 # ------------------------------------------------------------------
-# Step 1: Ensure storage mounts are present
+# Step 1: Ensure storage paths exist
 # ------------------------------------------------------------------
-echo -e "${BOLD}[1/7] Storage Mount Verification${NC}"
+echo -e "${BOLD}[1/7] Storage Path Verification${NC}"
 
-ensure_mount() {
-    local path="$1"
-    local label="$2"
+paths=(/srv/encrypted /srv/data)
+labels=("Encrypted volume" "Data volume")
 
-    if mountpoint -q "$path"; then
-        echo -e "  ${GREEN}✔${NC} ${label} (${path}) is mounted."
-        return 0
-    fi
-    return 1
-}
+while true; do
+    all_exist=true
+    for i in "${!paths[@]}"; do
+        path="${paths[$i]}"
+        label="${labels[$i]}"
 
-if ensure_mount /srv/encrypted "Encrypted volume" && ensure_mount /srv/data "Data volume"; then
-    echo -e "  ${GREEN}All storage mounts are ready.${NC}"
-else
-    echo -e "\n  ${YELLOW}Storage mounts are not fully set up.${NC}"
-    read -r -p "  Run the drive/interactive setup wizard? (y/n) [y]: " run_drives
-    run_drives=${run_drives:-y}
+        if [ -d "$path" ]; then
+            echo -e "  ${GREEN}✔${NC} ${label} (${path}) exists."
+            continue
+        fi
 
-    if [[ "$run_drives" =~ ^[Yy]$ ]]; then
-        bash "${SCRIPT_DIR}/scripts/setup-drives.sh"
-    fi
+        all_exist=false
+        echo -e "\n  ${YELLOW}${label} (${path}) does not exist.${NC}"
+        echo "    Choose action:"
+        echo "      1) Create and mount ZFS pool/dataset (${path})"
+        echo "      2) Create and mount ext4 partition (${path})"
+        echo "      3) Mount existing drive (${path})"
+        echo "      4) Create directory (${path})"
+        echo "      5) Wait and retry"
+        read -r choice
 
-    # Re-check after wizard
-    echo -e "\n  ${BOLD}Re-verifying mounts...${NC}"
-    if ! ensure_mount /srv/encrypted "Encrypted volume" || ! ensure_mount /srv/data "Data volume"; then
-        echo -e "\n  ${BOLD}Attempting to mount from fstab...${NC}"
-        mount /srv/encrypted 2>/dev/null || true
-        mount /srv/data 2>/dev/null || true
-    fi
+        case $choice in
+            1|2|3)
+                bash "${SCRIPT_DIR}/scripts/setup-drives.sh" "--${choice}" "$path"
+                ;;
+            4)
+                mkdir -p "$path"
+                ;;
+            5)
+                echo "  Waiting 5 seconds before retry..."
+                sleep 5
+                ;;
+        esac
 
-    if ! ensure_mount /srv/encrypted "Encrypted volume" || ! ensure_mount /srv/data "Data volume"; then
-        echo -e "\n${RED}${BOLD}CRITICAL:${NC} Storage mounts are still not available."
-        echo "  /srv/encrypted and /srv/data must be mounted to proceed."
-        echo "  If using encrypted ZFS, unlock and mount manually via SSH."
-        exit 1
-    fi
+        break
+    done
 
-    # Resolve source paths for app setup
-    SECURE_SRC=$(findmnt -n -o SOURCE --target /srv/encrypted 2>/dev/null | sed 's/\[.*\]//' || echo "/srv/encrypted")
-    DATA_SRC=$(findmnt -n -o SOURCE --target /srv/data 2>/dev/null | sed 's/\[.*\]//' || echo "/srv/data")
-fi
+    $all_exist && break
+done
 
-# Determine pool paths for app scripts
-SECURE_SRC=${SECURE_SRC:-/srv/encrypted}
-DATA_SRC=${DATA_SRC:-/srv/data}
+echo -e "  ${GREEN}All storage paths are ready.${NC}"
+
+SECURE_SRC=/srv/encrypted
+DATA_SRC=/srv/data
 
 # ------------------------------------------------------------------
 # Step 2: Create directory structure

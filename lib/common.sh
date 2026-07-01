@@ -103,6 +103,10 @@ check_mount_safety() {
 add_fstab_bind() {
     local src="$1"
     local dst="$2"
+    if [ "$src" = "$dst" ]; then
+        echo "  Source and destination are the same; skipping fstab entry."
+        return 0
+    fi
     if ! grep -qs "$dst" /etc/fstab 2>/dev/null; then
         echo "  Appending fstab bind mount: $src → $dst"
         echo "$src    $dst    none    bind,nofail    0    0" | tee -a /etc/fstab > /dev/null
